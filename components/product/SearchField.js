@@ -14,11 +14,10 @@ function SearchField({ products, setFilteredProducts }) {
   };
 
   return (
-    <div className="search-field-container">
+    <div className="search-container">
       <TextField
         fullWidth
         type="search"
-        label="Search Products"
         variant="outlined"
         value={searchInput}
         onChange={handleSearch}

@@ -22,7 +22,7 @@ const initialUserState = {
   streetAddress: '',
   city: '',
   state: '',
-  zipcode: undefined,
+  zipcode: '',
 };
 
 function UserForm({ user, onUpdate }) {
@@ -55,9 +55,10 @@ function UserForm({ user, onUpdate }) {
     e.preventDefault();
     if (user.id) {
       updateUser(user.id, { ...formData, state: selectedState });
-      router.push(`../../users/${user.id}`);
+      router.push(`../../user/${user.id}`);
     } else {
       registerUser(user, { ...formData, state: selectedState, uid: user.uid }).then(() => onUpdate(user.uid));
+      router.push('/');
     }
   };
 

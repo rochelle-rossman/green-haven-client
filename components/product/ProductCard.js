@@ -10,9 +10,9 @@ export default function ProductCard({ product }) {
   const router = useRouter();
 
   return (
-    <Card>
+    <Card sx={{ maxWidth: 345 }}>
       <CardActionArea onClick={() => router.push(`../products/${product.id}`)}>
-        <CardMedia component="img" image={product?.imageUrl} title={product.name} />
+        <CardMedia sx={{ maxHeight: 240, position: 'relative' }} component="img" image={product?.imageUrl} title={product.name} />
         <Typography gutterBottom variant="h5" component="h2">
           {product.name}
         </Typography>
