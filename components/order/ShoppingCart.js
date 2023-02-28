@@ -66,9 +66,9 @@ export default function ShoppingCart({
                     <TableCell align="center">
                       <CardActionArea onClick={() => router.push(`/products/${product.id}`)}>
                         <Typography align="left" style={{ margin: '10px' }}>
-                          {product.title}
+                          {product.name}
                         </Typography>
-                        <CardMedia style={{ height: 100, width: 100, backgroundSize: 'contain' }} image={product.image} title={product.title} />
+                        <CardMedia component="img" style={{ height: 100, width: 100, backgroundSize: 'contain' }} image={product.image_url} title={product.name} />
                       </CardActionArea>
                     </TableCell>
                     <TableCell align="right">
@@ -144,10 +144,10 @@ ShoppingCart.propTypes = {
       id: PropTypes.number,
       product: PropTypes.shape({
         id: PropTypes.number,
-        title: PropTypes.string,
+        name: PropTypes.string,
         price: PropTypes.number,
         inventory: PropTypes.number,
-        image: PropTypes.string,
+        imageUrl: PropTypes.string,
       }),
       quantity: PropTypes.number,
     }),

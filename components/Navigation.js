@@ -16,9 +16,8 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import {
-  ListItemButton, Collapse, Tooltip, Menu, MenuItem, Typography, Button,
+  ListItemButton, Tooltip, Menu, MenuItem, Typography, Button,
 } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -27,7 +26,7 @@ import { ProductTypeContext } from '../utils/context/productTypeContext';
 import { signOut, signIn } from '../utils/auth';
 import { useAuth } from '../utils/context/authContext';
 
-const drawerWidth = 240;
+const drawerWidth = 340;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -70,7 +69,6 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
   const { user } = useAuth();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [collapseOpen, setCollapseOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const { setProductType } = useContext(ProductTypeContext);
 
@@ -94,10 +92,6 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
   const handleDrawerClose = () => {
     setOpen(false);
     onDrawerClose();
-  };
-
-  const handleCollapseToggle = () => {
-    setCollapseOpen(!collapseOpen);
   };
 
   return (
@@ -186,20 +180,19 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
             <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick(''))}>Shop All Products</ListItemButton>
             <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Houseplants'))}>
               Houseplants
-              {collapseOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
-            <Collapse in={collapseOpen} unmountOnExit onClick={handleCollapseToggle}>
-              <List component="div" disablePadding>
-                <ListItemButton sx={{ pl: 4 }}>Care Level</ListItemButton>
-                <ListItemButton sx={{ pl: 4 }}>Water Needs</ListItemButton>
-                <ListItemButton sx={{ pl: 4 }}>Light Needs</ListItemButton>
-                <ListItemButton sx={{ pl: 4 }}>Pet Friendly</ListItemButton>
-              </List>
-            </Collapse>
-            <ListItemButton onClick={() => router.push('/designs')}>Designs/Looks</ListItemButton>
-            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Home/Decor'))}>Home & Decor</ListItemButton>
-            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Plant Care'))}>Plant Care</ListItemButton>
-            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Planters/Stands'))}>Planters & Stands</ListItemButton>
+            <ListItemButton onClick={() => router.push('/designs')}>
+              Designs/Looks
+            </ListItemButton>
+            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Home/Decor'))}>
+              Home & Decor
+            </ListItemButton>
+            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Plant Care'))}>
+              Plant Care
+            </ListItemButton>
+            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Planters/Stands'))}>
+              Planters & Stands
+            </ListItemButton>
           </List>
           <Divider />
         </Drawer>

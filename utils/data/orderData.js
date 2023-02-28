@@ -39,20 +39,9 @@ const getCompleteOrdersByCustomer = (customerId) => new Promise((resolve, reject
     .catch((error) => reject(error));
 });
 
-const getOrdersByStore = (storeId) => new Promise((resolve, reject) => {
-  fetch(`${dbUrl}/orders?store=${storeId}`)
-    .then((response) => response.json())
-    .then((data) => {
-      resolve(convertKeysToCamelCase(data));
-    })
-    .catch((error) => reject(error));
-});
-
 const createOrder = (order, userId) => new Promise((resolve, reject) => {
   const orderObj = {
-    store: order.store,
     customer: userId,
-    payment_method: order.paymentMethod,
     products: order.products,
   };
   fetch(`${dbUrl}/orders`, {
@@ -101,7 +90,7 @@ const getOpenProductOrderByCustomer = (customerId) => new Promise((resolve, reje
   fetch(`${dbUrl}/product_orders?customer=${customerId}&status=in-progress`)
     .then((response) => response.json())
     .then((data) => {
-      resolve(data);
+      resolve(convertKeysToCamelCase(data));
     })
     .catch(reject);
 });
@@ -130,5 +119,5 @@ const deleteProductOrder = (productOrderId) => new Promise((resolve, reject) => 
 });
 
 export {
-  getOrdersByCustomer, getOrdersByStore, getProductOrder, getOpenProductOrderByCustomer, createOrder, deleteOrder, updateOrder, getOpenOrdersByCustomer, updateProductOrder, deleteProductOrder, getCompleteOrdersByCustomer, getSingleOrder,
+  getOrdersByCustomer, getProductOrder, getOpenProductOrderByCustomer, createOrder, deleteOrder, updateOrder, getOpenOrdersByCustomer, updateProductOrder, deleteProductOrder, getCompleteOrdersByCustomer, getSingleOrder,
 };

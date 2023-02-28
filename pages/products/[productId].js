@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import ProductDetails from '../../components/product/ProductDetail';
 import { getSingleProduct } from '../../utils/data/productData';
 
 export default function ProductDetailView() {
@@ -12,6 +13,6 @@ export default function ProductDetailView() {
   }, [router, productId]);
 
   return (
-    <h3>{product.name}</h3>
+    <ProductDetails productObj={product} />
   );
 }
