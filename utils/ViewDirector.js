@@ -1,19 +1,29 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { useAuth } from './context/authContext';
 import Loading from '../components/Loading';
-import NavBar from '../components/NavBar';
+import Navigation from '../components/Navigation';
 
 const ViewDirectorBasedOnUserAuthStatus = ({ component: Component, pageProps }) => {
   const { userLoading } = useAuth();
 
-  // if user state is null, then show loader
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setIsDrawerOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false);
+  };
+
   if (userLoading) {
     return <Loading />;
   }
   return (
     <>
-      <NavBar />
-      <div className="container">
+      <Navigation onDrawerOpen={handleDrawerOpen} onDrawerClose={handleDrawerClose} />
+      <div className={`container ${isDrawerOpen ? 'drawer-open' : ''}`}>
         <Component {...pageProps} />
       </div>
     </>

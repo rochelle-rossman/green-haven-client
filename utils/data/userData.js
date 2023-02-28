@@ -1,4 +1,4 @@
-import { clientCredentials } from '../../client';
+import { clientCredentials } from '../client';
 
 const dbUrl = clientCredentials.databaseURL;
 
