@@ -66,9 +66,6 @@ body {
   margin-bottom: 80px;
 }
 
-#__next > div.MuiBox-root.css-k008qs > div > div > ul {
-  font-family: 'Roboto Slab', serif;
-}
 
 .userInfoCard-orderHistory-container {
 display: flex;

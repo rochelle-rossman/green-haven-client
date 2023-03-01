@@ -1,5 +1,8 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import {
   styled, createTheme, ThemeProvider,
 } from '@mui/material/styles';
@@ -9,6 +12,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Divider from '@mui/material/Divider';
@@ -17,7 +21,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {
-  ListItemButton, Tooltip, Menu, MenuItem, Typography, Button,
+  ListItemButton, Tooltip, Menu, MenuItem, Typography, Button, Collapse, ListItem,
 } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -63,17 +67,43 @@ const theme = createTheme({
       main: '#43a047',
     },
   },
+  components: {
+    MuiRadio: {
+      styleOverrides: {
+        root: {
+          '& .MuiSvgIcon-root': {
+            fontSize: '0.8rem',
+          },
+        },
+      },
+    },
+    formControlLabel: {
+      fontSize: '0.5rem',
+      '& .MuiTypography-root': {
+        fontSize: '0.5rem',
+      },
+    },
+  },
+  typography: {
+    fontFamily: 'Roboto Slab, serif',
+  },
 });
 
 export default function Navigation({ onDrawerOpen, onDrawerClose }) {
   const { user } = useAuth();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [openCollapse, setOpenCollapse] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const { setProductType } = useContext(ProductTypeContext);
+  const { productType, setProductType } = useContext(ProductTypeContext);
 
   const handleProductTypeClick = (type) => {
-    setProductType(type);
+    if (type === productType) {
+      setOpenCollapse(!openCollapse);
+    } else {
+      setProductType(type);
+      setOpenCollapse(true);
+    }
   };
 
   const handleOpenUserMenu = (event) => {
@@ -104,7 +134,7 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
               <MenuIcon />
             </IconButton>
             <Button onClick={() => router.push('/')}>
-              <Image src="/images/green-haven-high-resolution-logo-color-on-transparent-background (2).png" alt="Green Haven Logo" width={200} height={50} />
+              <Image src="/images/green-haven-high-resolution-logo-color-on-transparent-background.png" alt="Green Haven Logo" width={200} height={50} />
             </Button>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 1, marginLeft: 'auto' }}>
@@ -180,19 +210,42 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
             <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick(''))}>Shop All Products</ListItemButton>
             <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Houseplants'))}>
               Houseplants
+              {openCollapse ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
-            <ListItemButton onClick={() => router.push('/designs')}>
-              Designs/Looks
-            </ListItemButton>
-            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Home/Decor'))}>
-              Home & Decor
-            </ListItemButton>
-            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Plant Care'))}>
-              Plant Care
-            </ListItemButton>
-            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Planters/Stands'))}>
-              Planters & Stands
-            </ListItemButton>
+            {productType === 'Houseplants' && openCollapse ? (
+              <Collapse in={open} timeout="auto" unmountOnExit>
+                <List component="div" sx={{ pl: 4 }} disablePadding>
+                  <ListItem>
+                    <RadioGroup>
+                      <ListItem>Care Level</ListItem>
+                      <FormControlLabel sx={{ pl: 4 }} value="novice" control={<Radio />} label="Novice" />
+                      <FormControlLabel sx={{ pl: 4 }} value="intermediate" control={<Radio />} label="Intermediate" />
+                      <FormControlLabel sx={{ pl: 4 }} value="expert" control={<Radio />} label="Expert" />
+                    </RadioGroup>
+                  </ListItem>
+                  <ListItem>
+                    <RadioGroup>
+                      <ListItem>Light Level</ListItem>
+                      <FormControlLabel sx={{ pl: 4 }} value="low" control={<Radio />} label="Low" />
+                      <FormControlLabel sx={{ pl: 4 }} value="medium" control={<Radio />} label="Medium" />
+                      <FormControlLabel sx={{ pl: 4 }} value="high" control={<Radio />} label="High" />
+                    </RadioGroup>
+                  </ListItem>
+                  <ListItem>
+                    <RadioGroup>
+                      <ListItem>Water Needs</ListItem>
+                      <FormControlLabel sx={{ pl: 4 }} value="low" control={<Radio />} label="Low" />
+                      <FormControlLabel sx={{ pl: 4 }} value="medium" control={<Radio />} label="Medium" />
+                      <FormControlLabel sx={{ pl: 4 }} value="high" control={<Radio />} label="High" />
+                    </RadioGroup>
+                  </ListItem>
+                </List>
+              </Collapse>
+            ) : null}
+            <ListItemButton onClick={() => router.push('/designs').then(setProductType(''))}>Designs/Looks</ListItemButton>
+            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Home/Decor'))}>Home & Decor</ListItemButton>
+            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Plant Care'))}>Plant Care</ListItemButton>
+            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Planters/Stands'))}>Planters & Stands</ListItemButton>
           </List>
           <Divider />
         </Drawer>

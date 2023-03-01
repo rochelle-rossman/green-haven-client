@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Typography, Card, CardContent, CardMedia, CardActionArea,
+  Typography, Card, CardMedia, CardActionArea,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { formatCurrency } from '../../utils/utilityFunctions';
@@ -19,11 +19,11 @@ export default function ProductCard({ product }) {
         <Typography gutterBottom variant="h6" component="h2">
           {formatCurrency(product.price)}
         </Typography>
-        <CardContent>
+        {/* <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">
             {product.description}
           </Typography>
-        </CardContent>
+        </CardContent> */}
       </CardActionArea>
     </Card>
   );
