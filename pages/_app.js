@@ -6,6 +6,7 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import { AuthProvider } from '../utils/context/authContext';
 import { ProductTypeProvider } from '../utils/context/productTypeContext';
 import ViewDirectorBasedOnUserAuthStatus from '../utils/ViewDirector';
+import { CartCountProvider } from '../utils/context/cartCountContext';
 
 const theme = createTheme({
   typography: {
@@ -22,15 +23,17 @@ function MyApp({ Component, pageProps }) {
     <ThemeProvider theme={theme}>
       <AuthProvider>
         {/* gives children components access to user and auth methods */}
-        <ProductTypeProvider>
-          <ViewDirectorBasedOnUserAuthStatus
-            // if status is pending === loading
-            // if status is logged in === view app
-            // if status is logged out === sign in page
-            component={Component}
-            pageProps={pageProps}
-          />
-        </ProductTypeProvider>
+        <CartCountProvider>
+          <ProductTypeProvider>
+            <ViewDirectorBasedOnUserAuthStatus
+              // if status is pending === loading
+              // if status is logged in === view app
+              // if status is logged out === sign in page
+              component={Component}
+              pageProps={pageProps}
+            />
+          </ProductTypeProvider>
+        </CartCountProvider>
       </AuthProvider>
     </ThemeProvider>
   );

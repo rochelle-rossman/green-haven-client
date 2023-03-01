@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import {
@@ -8,12 +8,14 @@ import { ShoppingCart } from '@mui/icons-material';
 import { useAuth } from '../../utils/context/authContext';
 import { formatCurrency } from '../../utils/utilityFunctions';
 import { updateOrder, getOpenOrdersByCustomer, createOrder } from '../../utils/data/orderData';
+import { CartCountContext } from '../../utils/context/cartCountContext';
 
 function ProductDetails({ productObj }) {
   const [quantity, setQuantity] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useAuth();
   const router = useRouter();
+  const { cartCount, setCartCount } = useContext(CartCountContext);
 
   const rootStyle = {
     display: 'flex',
@@ -74,6 +76,7 @@ function ProductDetails({ productObj }) {
         // send updated product array
         updateOrder(openOrder.id, payload).then(() => {
           router.push(`/user/shoppingCart/${user.id}`);
+          setCartCount(cartCount + quantity);
         });
       } else {
         // create new order

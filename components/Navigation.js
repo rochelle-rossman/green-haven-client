@@ -21,12 +21,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {
-  ListItemButton, Tooltip, Menu, MenuItem, Typography, Button, Collapse, ListItem,
+  ListItemButton, Tooltip, Menu, MenuItem, Typography, Button, Collapse, ListItem, Badge,
 } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ProductTypeContext } from '../utils/context/productTypeContext';
+import { CartCountContext } from '../utils/context/cartCountContext';
 import { signOut, signIn } from '../utils/auth';
 import { useAuth } from '../utils/context/authContext';
 
@@ -96,6 +97,7 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
   const [openCollapse, setOpenCollapse] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const { productType, setProductType } = useContext(ProductTypeContext);
+  const { cartCount } = useContext(CartCountContext);
 
   const handleProductTypeClick = (type) => {
     if (type === productType) {
@@ -182,7 +184,9 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
             </Menu>
             {user.id ? (
               <IconButton aria-label="cart" onClick={() => router.push(`/user/shoppingCart/${user.id}`)}>
-                <ShoppingCartIcon />
+                <Badge badgeContent={cartCount} color="warning">
+                  <ShoppingCartIcon />
+                </Badge>
               </IconButton>
             ) : (
               ''
