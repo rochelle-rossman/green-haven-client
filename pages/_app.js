@@ -2,17 +2,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect } from 'react';
 import '../styles/globals.css';
-import { createTheme, ThemeProvider } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
 import { AuthProvider } from '../utils/context/authContext';
 import { ProductTypeProvider } from '../utils/context/productTypeContext';
 import ViewDirectorBasedOnUserAuthStatus from '../utils/ViewDirector';
 import { CartCountProvider } from '../utils/context/cartCountContext';
-
-const theme = createTheme({
-  typography: {
-    fontFamily: 'Roboto Slab, serif',
-  },
-});
+import theme from '../styles/theme';
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
