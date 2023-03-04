@@ -1,14 +1,16 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import {
-  styled, createTheme, ThemeProvider,
-} from '@mui/material/styles';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Divider from '@mui/material/Divider';
@@ -17,20 +19,22 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {
-  ListItemButton, Tooltip, Menu, MenuItem, Typography, Button,
+  ListItemButton, Tooltip, Menu, MenuItem, Typography, Button, Collapse, ListItemText, Badge,
 } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ProductTypeContext } from '../utils/context/productTypeContext';
+import { CartCountContext } from '../utils/context/cartCountContext';
 import { signOut, signIn } from '../utils/auth';
 import { useAuth } from '../utils/context/authContext';
+import theme from '../styles/theme';
 
 const drawerWidth = 340;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
+})(({ open }) => ({
   transition: theme.transitions.create(['margin', 'width'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -45,7 +49,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const DrawerHeader = styled('div')(({ theme }) => ({
+const DrawerHeader = styled('div')(() => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(0, 1),
@@ -54,26 +58,53 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#9ccc65',
-    },
-    secondary: {
-      main: '#43a047',
-    },
-  },
-});
-
 export default function Navigation({ onDrawerOpen, onDrawerClose }) {
   const { user } = useAuth();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [openCollapse, setOpenCollapse] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const { setProductType } = useContext(ProductTypeContext);
+  const { productType, setProductType } = useContext(ProductTypeContext);
+  const { cartCount } = useContext(CartCountContext);
+  // State variables for the selected values of each radio group
+  const [careLevel, setCareLevel] = useState('');
+  const [lightLevel, setLightLevel] = useState('');
+  const [waterNeeds, setWaterNeeds] = useState('');
+  const [lightLevelOpen, setLightLevelOpen] = useState(false);
+  const [careLevelOpen, setCareLevelOpen] = useState(false);
+  const [waterNeedsOpen, setWaterNeedsOpen] = useState(false);
 
   const handleProductTypeClick = (type) => {
-    setProductType(type);
+    if (type === productType) {
+      setOpenCollapse(!openCollapse);
+    } else {
+      setProductType(type);
+      setOpenCollapse(true);
+    }
+  };
+
+  const handleCareLevelClick = () => {
+    if (careLevelOpen) {
+      setCareLevelOpen(false);
+    } else {
+      setCareLevelOpen(true);
+    }
+  };
+
+  const handleWaterNeedsClick = () => {
+    if (waterNeedsOpen) {
+      setWaterNeedsOpen(false);
+    } else {
+      setWaterNeedsOpen(true);
+    }
+  };
+
+  const handleLightLevelClick = () => {
+    if (lightLevelOpen) {
+      setLightLevelOpen(false);
+    } else {
+      setLightLevelOpen(true);
+    }
   };
 
   const handleOpenUserMenu = (event) => {
@@ -93,111 +124,167 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
     setOpen(false);
     onDrawerClose();
   };
+  // Handlers for radio group value changes
+  const handleCareLevelChange = (event) => {
+    setCareLevel(event.target.value);
+  };
+
+  const handleLightLevelChange = (event) => {
+    setLightLevel(event.target.value);
+  };
+  const handleWaterNeedsChange = (event) => {
+    setWaterNeeds(event.target.value);
+  };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar position="fixed" color="primary" open={open}>
-          <Toolbar>
-            <IconButton color="inherit" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" sx={{ mr: 2, ...(open && { display: 'none' }) }}>
-              <MenuIcon />
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar position="fixed" color="primary" open={open}>
+        <Toolbar>
+          <IconButton color="inherit" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" sx={{ mr: 2, ...(open && { display: 'none' }) }}>
+            <MenuIcon />
+          </IconButton>
+          <Button onClick={() => router.push('/')}>
+            <Image src="/images/green-haven-high-resolution-logo-color-on-transparent-background.png" alt="Green Haven Logo" width={200} height={50} />
+          </Button>
+          <Tooltip title="Open settings">
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 1, marginLeft: 'auto' }}>
+              <AccountCircle />
             </IconButton>
-            <Button onClick={() => router.push('/')}>
-              <Image src="/images/green-haven-high-resolution-logo-color-on-transparent-background (2).png" alt="Green Haven Logo" width={200} height={50} />
-            </Button>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 1, marginLeft: 'auto' }}>
-                <AccountCircle />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {user.id ? (
-                <div>
-                  <MenuItem>
-                    <Typography>
-                      <Link href={`/user/${user.id}`}>My Account</Link>
-                    </Typography>
-                  </MenuItem>
-                </div>
-              ) : (
-                ''
-              )}
-              <MenuItem onClick={handleCloseUserMenu}>
-                {user ? (
-                  <Typography onClick={signOut} textAlign="center">
-                    Logout
-                  </Typography>
-                ) : (
-                  <Typography textAlign="center" onClick={signIn}>
-                    Login/Register
-                  </Typography>
-                )}
-              </MenuItem>
-            </Menu>
+          </Tooltip>
+          <Menu
+            sx={{ mt: '45px' }}
+            id="menu-appbar"
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
             {user.id ? (
-              <IconButton aria-label="cart" onClick={() => router.push(`/user/shoppingCart/${user.id}`)}>
-                <ShoppingCartIcon />
-              </IconButton>
+              <div>
+                <MenuItem>
+                  <Typography>
+                    <Link href={`/user/${user.id}`}>My Account</Link>
+                  </Typography>
+                </MenuItem>
+              </div>
             ) : (
               ''
             )}
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          sx={{
+            <MenuItem onClick={handleCloseUserMenu}>
+              {user ? (
+                <Typography onClick={signOut} textAlign="center">
+                  Logout
+                </Typography>
+              ) : (
+                <Typography textAlign="center" onClick={signIn}>
+                  Login/Register
+                </Typography>
+              )}
+            </MenuItem>
+          </Menu>
+          {user.id ? (
+            <IconButton aria-label="cart" onClick={() => router.push(`/user/shoppingCart/${user.id}`)}>
+              <Badge badgeContent={cartCount} color="warning">
+                <ShoppingCartIcon />
+              </Badge>
+            </IconButton>
+          ) : (
+            ''
+          )}
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
             width: drawerWidth,
-            flexShrink: 0,
-            '& .MuiDrawer-paper': {
-              width: drawerWidth,
-              boxSizing: 'border-box',
-            },
-          }}
-          variant="persistent"
-          anchor="left"
-          open={open}
-        >
-          <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>{theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}</IconButton>
-          </DrawerHeader>
-          <Divider />
-          <List>
-            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick(''))}>Shop All Products</ListItemButton>
-            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Houseplants'))}>
-              Houseplants
-            </ListItemButton>
-            <ListItemButton onClick={() => router.push('/designs')}>
-              Designs/Looks
-            </ListItemButton>
-            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Home/Decor'))}>
-              Home & Decor
-            </ListItemButton>
-            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Plant Care'))}>
-              Plant Care
-            </ListItemButton>
-            <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Planters/Stands'))}>
-              Planters & Stands
-            </ListItemButton>
-          </List>
-          <Divider />
-        </Drawer>
-      </Box>
-    </ThemeProvider>
+            boxSizing: 'border-box',
+          },
+        }}
+        variant="persistent"
+        anchor="left"
+        open={open}
+      >
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>{theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}</IconButton>
+        </DrawerHeader>
+        <Divider />
+        <List>
+          <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick(''))}>Shop All Products</ListItemButton>
+          <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Houseplants'))}>
+            Houseplants
+            {openCollapse ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          {productType === 'Houseplants' && openCollapse ? (
+            <Collapse in={openCollapse} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding sx={{ pl: 4 }}>
+                <ListItemButton onClick={handleCareLevelClick}>
+                  <ListItemText primary="Care Level" />
+                  {careLevelOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={careLevelOpen} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItemButton>
+                      <RadioGroup sx={{ pl: 4 }} value={careLevel} onChange={handleCareLevelChange}>
+                        <FormControlLabel value="novice" control={<Radio />} label="Novice" />
+                        <FormControlLabel value="intermediate" control={<Radio />} label="Intermediate" />
+                        <FormControlLabel value="expert" control={<Radio />} label="Expert" />
+                      </RadioGroup>
+                    </ListItemButton>
+                  </List>
+                </Collapse>
+                <ListItemButton onClick={handleLightLevelClick}>
+                  <ListItemText primary="Light Level" />
+                  {lightLevelOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={lightLevelOpen} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItemButton>
+                      <RadioGroup sx={{ pl: 4 }} value={lightLevel} onChange={handleLightLevelChange}>
+                        <FormControlLabel value="low" control={<Radio />} label="Low" />
+                        <FormControlLabel value="medium" control={<Radio />} label="Medium" />
+                        <FormControlLabel value="high" control={<Radio />} label="High" />
+                      </RadioGroup>
+                    </ListItemButton>
+                  </List>
+                </Collapse>
+                <ListItemButton onClick={handleWaterNeedsClick}>
+                  <ListItemText primary="Water Needs" />
+                  {waterNeedsOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={waterNeedsOpen} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding sx={{ pl: 4 }}>
+                    <ListItemButton>
+                      <RadioGroup value={waterNeeds} onChange={handleWaterNeedsChange}>
+                        <FormControlLabel value="low" control={<Radio />} label="Low" />
+                        <FormControlLabel value="medium" control={<Radio />} label="Medium" />
+                        <FormControlLabel value="high" control={<Radio />} label="High" />
+                      </RadioGroup>
+                    </ListItemButton>
+                  </List>
+                </Collapse>
+                <ListItemButton>Pet Friendly</ListItemButton>
+              </List>
+            </Collapse>
+          ) : null}
+          <ListItemButton onClick={() => router.push('/designs').then(setProductType(''))}>Designs/Looks</ListItemButton>
+          <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Home/Decor'))}>Home & Decor</ListItemButton>
+          <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Plant Care'))}>Plant Care</ListItemButton>
+          <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Planters/Stands'))}>Planters & Stands</ListItemButton>
+        </List>
+        <Divider />
+      </Drawer>
+    </Box>
   );
 }
 

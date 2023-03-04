@@ -1,12 +1,14 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import ShoppingCart from '../../../components/order/ShoppingCart';
 import { deleteProductOrder, getOpenProductOrderByCustomer, updateProductOrder } from '../../../utils/data/orderData';
+import { CartCountContext } from '../../../utils/context/cartCountContext';
 
 export default function ShoppingCartView() {
   const router = useRouter();
   const { userId } = router.query;
   const [openOrder, setOpenOrder] = useState([]);
+  const { cartCount, setCartCount } = useContext(CartCountContext);
 
   useEffect(() => {
     getOpenProductOrderByCustomer(userId).then(setOpenOrder);
@@ -27,10 +29,12 @@ export default function ShoppingCartView() {
         order: productOrderToUpdate.order.id,
         quantity: productOrderToUpdate.quantity - 1,
       }).then(() => setOpenOrder(updatedProductOrders));
+      setCartCount(cartCount - 1);
     } else {
       deleteProductOrder(productOrderToUpdate.id).then(() => {
         setOpenOrder(openOrder.filter((productOrder) => productOrder.id !== productOrderToUpdate.id));
       });
+      setCartCount(cartCount - 1);
     }
   };
 
@@ -48,6 +52,7 @@ export default function ShoppingCartView() {
       order: productOrderToUpdate.order.id,
       quantity: productOrderToUpdate.quantity,
     }).then(() => setOpenOrder(updatedProductOrders));
+    setCartCount(cartCount + 1);
   };
 
   const handleDelete = (productId) => {

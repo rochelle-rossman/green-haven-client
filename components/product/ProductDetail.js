@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import {
   Card, CardMedia, CardContent, Typography, Button, Dialog, DialogContent, DialogTitle, CardActionArea, Badge,
 } from '@mui/material';
-import { ShoppingCart } from '@mui/icons-material';
+import { ShoppingCart, PetsOutlined } from '@mui/icons-material';
 import { useAuth } from '../../utils/context/authContext';
 import { formatCurrency } from '../../utils/utilityFunctions';
 import { updateOrder, getOpenOrdersByCustomer, createOrder } from '../../utils/data/orderData';
+import { CartCountContext } from '../../utils/context/cartCountContext';
 
 function ProductDetails({ productObj }) {
   const [quantity, setQuantity] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useAuth();
   const router = useRouter();
+  const { cartCount, setCartCount } = useContext(CartCountContext);
 
   const rootStyle = {
     display: 'flex',
@@ -25,8 +27,8 @@ function ProductDetails({ productObj }) {
   };
 
   const mediaStyle = {
-    width: '100%',
-    height: '100%',
+    maxHeight: '600px',
+    maxWidth: '600px',
   };
 
   const descriptionStyle = {
@@ -74,6 +76,7 @@ function ProductDetails({ productObj }) {
         // send updated product array
         updateOrder(openOrder.id, payload).then(() => {
           router.push(`/user/shoppingCart/${user.id}`);
+          setCartCount(cartCount + quantity);
         });
       } else {
         // create new order
@@ -83,6 +86,7 @@ function ProductDetails({ productObj }) {
         createOrder(newOrder, user.id).then(() => {
           router.push(`/user/shoppingCart/${user.id}`);
         });
+        setCartCount(cartCount + quantity);
       }
     });
   };
@@ -104,7 +108,7 @@ function ProductDetails({ productObj }) {
             <Typography variant="body2">Light Level: {productObj.lightLevel}</Typography>
             <Typography variant="body2">Water Needs: {productObj.waterNeeds}</Typography>
             <Typography variant="body2">Care Level: {productObj.careLevel}</Typography>
-            <Typography variant="body2">Pet Friendly: {productObj.petFriendly ? 'Yes' : 'No'}</Typography>
+            {productObj.petFriendly ? <PetsOutlined /> : <Typography variant="body2">Not Safe for Pets</Typography>}
           </div>
         )}
         {isHomeDecor && <Typography variant="body2">Style: {productObj.style}</Typography>}
@@ -112,17 +116,17 @@ function ProductDetails({ productObj }) {
           {formatCurrency(productObj.price)}
         </Typography>
         <div>
-          <Button onClick={handleDecrement} disabled={quantity === 1}>
+          <Button color="secondary" onClick={handleDecrement} disabled={quantity === 1}>
             -
           </Button>
           <Typography variant="body2" component="span" sx={{ margin: '0 8px' }}>
             {quantity}
           </Typography>
-          <Button onClick={handleIncrement} disabled={quantity >= productObj.inventory}>
+          <Button onClick={handleIncrement} color="secondary" disabled={quantity >= productObj.inventory}>
             +
           </Button>
         </div>
-        <Button variant="contained" onClick={addToCart} disabled={productObj.inventory === 0}>
+        <Button variant="contained" color="secondary" onClick={addToCart} disabled={productObj.inventory === 0}>
           <ShoppingCart />
           Add to Cart
         </Button>

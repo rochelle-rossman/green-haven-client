@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
@@ -10,6 +10,7 @@ import { updateOrder } from '../../utils/data/orderData';
 import { formatCurrency } from '../../utils/utilityFunctions';
 import { getCustomersPaymentMethods } from '../../utils/data/paymentMethodData';
 import { useAuth } from '../../utils/context/authContext';
+import { CartCountContext } from '../../utils/context/cartCountContext';
 
 export default function ShoppingCart({
   productOrderObj, handleDecrement, handleIncrement, handleDelete,
@@ -19,6 +20,7 @@ export default function ShoppingCart({
   const { user } = useAuth();
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState({});
   const router = useRouter();
+  const { setCartCount } = useContext(CartCountContext);
 
   useEffect(() => {
     getCustomersPaymentMethods(user.id).then((response) => setPayments(response));
@@ -37,6 +39,7 @@ export default function ShoppingCart({
         ],
       }).then(() => router.push('/'));
     });
+    setCartCount(0);
   };
 
   return (

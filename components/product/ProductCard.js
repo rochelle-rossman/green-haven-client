@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Typography, Card, CardContent, CardMedia, CardActionArea,
+  Typography, Card, CardMedia, CardActionArea, Box,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { formatCurrency } from '../../utils/utilityFunctions';
@@ -12,18 +12,18 @@ export default function ProductCard({ product }) {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea onClick={() => router.push(`../products/${product.id}`)}>
-        <CardMedia sx={{ maxHeight: 240, position: 'relative' }} component="img" image={product?.imageUrl} title={product.name} />
-        <Typography gutterBottom variant="h5" component="h2">
-          {product.name}
-        </Typography>
-        <Typography gutterBottom variant="h6" component="h2">
-          {formatCurrency(product.price)}
-        </Typography>
-        <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {product.description}
+        <CardMedia component="img" width="100%" height="250px" image={product.imageUrl} title={product.name} />
+        <Box sx={{
+          display: 'flex', justifyContent: 'space-between', flexGrow: 1, p: 2,
+        }}
+        >
+          <Typography variant="body" gutterBottom sx={{ fontWeight: 'bold', flexWrap: 'wrap' }}>
+            {product.name}
           </Typography>
-        </CardContent>
+          <Typography variant="body" gutterBottom sx={{ pb: '24px' }}>
+            {formatCurrency(product.price)}
+          </Typography>
+        </Box>
       </CardActionArea>
     </Card>
   );
