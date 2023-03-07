@@ -23,7 +23,7 @@ function UserInfoCard({ userObj }) {
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {userObj.state}, {userObj.zipcode}
         </Typography>
-        <Button onClick={() => router.push(`/user/edit/${userObj.id}`)}>Update Profile</Button>
+        <Button color="secondary" onClick={() => router.push(`/user/edit/${userObj.id}`)}>Update Profile</Button>
       </CardContent>
     </Card>
   );

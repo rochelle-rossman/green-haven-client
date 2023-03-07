@@ -41,10 +41,10 @@ export default function PaymentMethodsTable({ paymentMethods, onUpdate }) {
               <TableCell align="right">{method.card_number}</TableCell>
               <TableCell align="right">{method.expiration_date}</TableCell>
               <TableCell>
-                <Button color="success" onClick={() => editPaymentMethod(method)}>
+                <Button color="secondary" onClick={() => editPaymentMethod(method)}>
                   <EditIcon />
                 </Button>
-                <Button color="error" onClick={() => deletePayment(method)}>
+                <Button color="warning" onClick={() => deletePayment(method)}>
                   <DeleteIcon />
                 </Button>
               </TableCell>
@@ -53,7 +53,9 @@ export default function PaymentMethodsTable({ paymentMethods, onUpdate }) {
         </TableBody>
       </Table>
       <TableBody>
-        <Button onClick={() => router.push('../user/payment/new')}>Add A New Payment Method</Button>
+        <Button color="secondary" onClick={() => router.push('../user/payment/new')}>
+          Add A New Payment Method
+        </Button>
       </TableBody>
     </TableContainer>
   );

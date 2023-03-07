@@ -38,7 +38,9 @@ export default function OrdersTable({ orders }) {
             <TableRow key={order.id}>
               <TableCell component="th" scope="row">
                 <Tooltip title="View Details" placement="right">
-                  <Button onClick={() => router.push(`/user/order/${order.id}`)}>{order.id}</Button>
+                  <Button color="secondary" onClick={() => router.push(`/user/order/${order.id}`)}>
+                    {order.id}
+                  </Button>
                 </Tooltip>
               </TableCell>
               <TableCell align="right">{order.status}</TableCell>

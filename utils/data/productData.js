@@ -28,12 +28,6 @@ const getProductTypes = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-// const getProductsByType = (type) => new Promise((resolve, reject) => {
-//   fetch(`${dbUrl}/products?type=${type}`)
-//     .then((response) => response.json())
-//     .then((data) => resolve(convertKeysToCamelCase(data)))
-//     .catch(reject);
-// });
 const getProductsByType = (queryParams) => new Promise((resolve, reject) => {
   const {
     type, careLevel, lightLevel, waterNeeds, petFriendly,
