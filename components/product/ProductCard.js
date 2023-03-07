@@ -10,17 +10,23 @@ export default function ProductCard({ product }) {
   const router = useRouter();
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345, flex: 1, minHeight: '330px' }}>
       <CardActionArea onClick={() => router.push(`../products/${product.id}`)}>
-        <CardMedia component="img" width="100%" height="250px" image={product.imageUrl} title={product.name} />
-        <Box sx={{
-          display: 'flex', justifyContent: 'space-between', flexGrow: 1, p: 2,
-        }}
+        <CardMedia component="img" width="auto" height="250px" image={product.imageUrl} title={product.name} />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: 'column',
+            flexGrow: 1,
+            p: 2,
+            position: 'relative',
+          }}
         >
-          <Typography variant="body" gutterBottom sx={{ fontWeight: 'bold', flexWrap: 'wrap' }}>
+          <Typography variant="body" gutterBottom sx={{ fontWeight: 'bold' }}>
             {product.name}
           </Typography>
-          <Typography variant="body" gutterBottom sx={{ pb: '24px' }}>
+          <Typography variant="body" gutterBottom sx={{ paddingBottom: '18px' }}>
             {formatCurrency(product.price)}
           </Typography>
         </Box>
