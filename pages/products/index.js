@@ -6,7 +6,9 @@ import SearchField from '../../components/product/SearchField';
 import { getProducts, getProductsByType } from '../../utils/data/productData';
 
 function ProductHome() {
-  const { productType } = useContext(ProductTypeContext);
+  const {
+    productType, careLevel, lightLevel, waterNeeds, petFriendly,
+  } = useContext(ProductTypeContext);
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
@@ -18,7 +20,21 @@ function ProductHome() {
   };
 
   const getProductsBySelectedType = () => {
-    getProductsByType(productType).then((productsArr) => {
+    if (!productType) {
+      setFilteredProducts([]);
+      setProducts([]);
+      return;
+    }
+
+    const queryParams = {
+      type: productType,
+      careLevel,
+      lightLevel,
+      waterNeeds,
+      petFriendly,
+    };
+
+    getProductsByType(queryParams).then((productsArr) => {
       setProducts(productsArr);
       setFilteredProducts(productsArr);
     });
@@ -30,7 +46,7 @@ function ProductHome() {
     } else {
       getAllProducts();
     }
-  }, [productType]);
+  }, [productType, careLevel, lightLevel, waterNeeds, petFriendly]);
 
   return (
     <div className="products">

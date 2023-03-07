@@ -62,50 +62,29 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
   const { user } = useAuth();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [openCollapse, setOpenCollapse] = useState(false);
+  const [expandedProductTypes, setExpandedProductTypes] = useState([]);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const { productType, setProductType } = useContext(ProductTypeContext);
+  const {
+    productType, setProductType, careLevel, setCareLevel, lightLevel, setLightLevel, waterNeeds, setWaterNeeds, petFriendly, setPetFriendly,
+  } = useContext(ProductTypeContext);
   const { cartCount } = useContext(CartCountContext);
-  // State variables for the selected values of each radio group
-  const [careLevel, setCareLevel] = useState('');
-  const [lightLevel, setLightLevel] = useState('');
-  const [waterNeeds, setWaterNeeds] = useState('');
   const [lightLevelOpen, setLightLevelOpen] = useState(false);
   const [careLevelOpen, setCareLevelOpen] = useState(false);
   const [waterNeedsOpen, setWaterNeedsOpen] = useState(false);
+  const [roomOpen, setRoomOpen] = useState(false);
+
+  const handleToggle = (state, setState) => () => {
+    setState(!state);
+  };
 
   const handleProductTypeClick = (type) => {
-    if (type === productType) {
-      setOpenCollapse(!openCollapse);
-    } else {
-      setProductType(type);
-      setOpenCollapse(true);
-    }
+    setProductType(type);
+    setExpandedProductTypes((prev) => ({ ...prev, [type]: !prev[type] }));
   };
 
-  const handleCareLevelClick = () => {
-    if (careLevelOpen) {
-      setCareLevelOpen(false);
-    } else {
-      setCareLevelOpen(true);
-    }
-  };
-
-  const handleWaterNeedsClick = () => {
-    if (waterNeedsOpen) {
-      setWaterNeedsOpen(false);
-    } else {
-      setWaterNeedsOpen(true);
-    }
-  };
-
-  const handleLightLevelClick = () => {
-    if (lightLevelOpen) {
-      setLightLevelOpen(false);
-    } else {
-      setLightLevelOpen(true);
-    }
-  };
+  const handleCareLevelClick = handleToggle(careLevelOpen, setCareLevelOpen);
+  const handleWaterNeedsClick = handleToggle(waterNeedsOpen, setWaterNeedsOpen);
+  const handleLightLevelClick = handleToggle(lightLevelOpen, setLightLevelOpen);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -134,6 +113,17 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
   };
   const handleWaterNeedsChange = (event) => {
     setWaterNeeds(event.target.value);
+  };
+
+  const handlePetFriendlyChange = (event) => {
+    setPetFriendly(event.target.value);
+  };
+
+  const handleClearFilters = () => {
+    setCareLevel('');
+    setLightLevel('');
+    setWaterNeeds('');
+    setPetFriendly('');
   };
 
   return (
@@ -221,12 +211,17 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
         <Divider />
         <List>
           <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick(''))}>Shop All Products</ListItemButton>
-          <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Houseplants'))}>
+          <ListItemButton
+            onClick={() => {
+              handleProductTypeClick('Houseplants');
+              router.push('/products');
+            }}
+          >
             Houseplants
-            {openCollapse ? <ExpandLess /> : <ExpandMore />}
+            {expandedProductTypes.Houseplants ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
-          {productType === 'Houseplants' && openCollapse ? (
-            <Collapse in={openCollapse} timeout="auto" unmountOnExit>
+          {productType === 'Houseplants' && expandedProductTypes.Houseplants ? (
+            <Collapse in={expandedProductTypes.Houseplants} timeout="auto" unmountOnExit>
               <List component="div" disablePadding sx={{ pl: 4 }}>
                 <ListItemButton onClick={handleCareLevelClick}>
                   <ListItemText primary="Care Level" />
@@ -273,11 +268,35 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
                     </ListItemButton>
                   </List>
                 </Collapse>
-                <ListItemButton>Pet Friendly</ListItemButton>
+                <ListItemButton>
+                  Pet Friendly
+                  <RadioGroup value={petFriendly} sx={{ pl: 1 }}>
+                    <FormControlLabel onClick={handlePetFriendlyChange} value="True" control={<Radio />} />
+                  </RadioGroup>
+                </ListItemButton>
+                {careLevel || waterNeeds || lightLevel || petFriendly ? <Button onClick={handleClearFilters}>Clear Filters</Button> : ''}
               </List>
             </Collapse>
           ) : null}
-          <ListItemButton onClick={() => router.push('/designs').then(setProductType(''))}>Designs/Looks</ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              handleProductTypeClick('Designs');
+              router.push('/designs');
+            }}
+          >
+            Designs/Looks
+            {expandedProductTypes.Designs ? <ExpandLess /> : <ExpandMore />}
+            {productType === 'Designs' && expandedProductTypes.Designs ? (
+              <Collapse in={expandedProductTypes.Designs} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <ListItemButton onClick={handleToggle(roomOpen, setRoomOpen)}>
+                    <ListItemText primary="Room" />
+                  </ListItemButton>
+                  {roomOpen ? <ExpandLess /> : <ExpandMore />}
+                </List>
+              </Collapse>
+            ) : null}
+          </ListItemButton>
           <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Home/Decor'))}>Home & Decor</ListItemButton>
           <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Plant Care'))}>Plant Care</ListItemButton>
           <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Planters/Stands'))}>Planters & Stands</ListItemButton>

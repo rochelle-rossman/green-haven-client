@@ -28,8 +28,32 @@ const getProductTypes = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const getProductsByType = (type) => new Promise((resolve, reject) => {
-  fetch(`${dbUrl}/products?type=${type}`)
+// const getProductsByType = (type) => new Promise((resolve, reject) => {
+//   fetch(`${dbUrl}/products?type=${type}`)
+//     .then((response) => response.json())
+//     .then((data) => resolve(convertKeysToCamelCase(data)))
+//     .catch(reject);
+// });
+const getProductsByType = (queryParams) => new Promise((resolve, reject) => {
+  const {
+    type, careLevel, lightLevel, waterNeeds, petFriendly,
+  } = queryParams;
+  let queryString = `type=${type}`;
+  if (type === 'Houseplants') {
+    if (careLevel) {
+      queryString += `&care_level=${careLevel}`;
+    }
+    if (lightLevel) {
+      queryString += `&light_level=${lightLevel}`;
+    }
+    if (waterNeeds) {
+      queryString += `&water_needs=${waterNeeds}`;
+    }
+    if (petFriendly) {
+      queryString += '&pet_friendly=True';
+    }
+  }
+  fetch(`${dbUrl}/products?${queryString}`)
     .then((response) => response.json())
     .then((data) => resolve(convertKeysToCamelCase(data)))
     .catch(reject);
