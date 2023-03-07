@@ -76,9 +76,11 @@ export default function ShoppingCart({
                     </TableCell>
                     <TableCell align="right">
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Button onClick={() => handleDecrement(product.id)}>-</Button>
+                        <Button color="secondary" onClick={() => handleDecrement(product.id)}>
+                          -
+                        </Button>
                         {quantity}
-                        <Button onClick={() => handleIncrement(product.id)} disabled={quantity >= product.inventory}>
+                        <Button color="secondary" onClick={() => handleIncrement(product.id)} disabled={quantity >= product.inventory}>
                           +
                         </Button>
                       </div>
@@ -87,7 +89,7 @@ export default function ShoppingCart({
                       {formatCurrency(product.price)} {quantity > 1 ? 'each' : ''}
                     </TableCell>
                     <TableCell align="center">
-                      <Button color="error" size="small" fontSize="small" onClick={() => handleDelete(product.id)}>
+                      <Button color="warning" size="small" fontSize="small" onClick={() => handleDelete(product.id)}>
                         <DeleteIcon />
                       </Button>
                     </TableCell>
@@ -113,7 +115,7 @@ export default function ShoppingCart({
                 </FormControl>
               </div>
               <div style={{ justifyContent: 'flex-end' }}>
-                <Button disabled={!selectedPaymentMethod.id} variant="outlined" color="success" onClick={() => handleCheckOut()}>
+                <Button disabled={!selectedPaymentMethod.id} variant="outlined" color="secondary" onClick={() => handleCheckOut()}>
                   Check Out
                 </Button>
               </div>

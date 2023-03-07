@@ -65,13 +65,14 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
   const [expandedProductTypes, setExpandedProductTypes] = useState([]);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const {
-    productType, setProductType, careLevel, setCareLevel, lightLevel, setLightLevel, waterNeeds, setWaterNeeds, petFriendly, setPetFriendly,
+    productType, setProductType, careLevel, setCareLevel, lightLevel, setLightLevel, waterNeeds, setWaterNeeds, petFriendly, setPetFriendly, designStyle, setDesignStyle, designRoom, setDesignRoom,
   } = useContext(ProductTypeContext);
   const { cartCount } = useContext(CartCountContext);
   const [lightLevelOpen, setLightLevelOpen] = useState(false);
   const [careLevelOpen, setCareLevelOpen] = useState(false);
   const [waterNeedsOpen, setWaterNeedsOpen] = useState(false);
   const [roomOpen, setRoomOpen] = useState(false);
+  const [styleOpen, setStyleOpen] = useState(false);
 
   const handleToggle = (state, setState) => () => {
     setState(!state);
@@ -119,11 +120,21 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
     setPetFriendly(event.target.value);
   };
 
+  const handleDesignRoomChange = (event) => {
+    setDesignRoom(event.target.value);
+  };
+
+  const handleDesignStyleChange = (event) => {
+    setDesignStyle(event.target.value);
+  };
+
   const handleClearFilters = () => {
     setCareLevel('');
     setLightLevel('');
     setWaterNeeds('');
     setPetFriendly('');
+    setDesignRoom('');
+    setDesignStyle('');
   };
 
   return (
@@ -286,17 +297,53 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
           >
             Designs/Looks
             {expandedProductTypes.Designs ? <ExpandLess /> : <ExpandMore />}
-            {productType === 'Designs' && expandedProductTypes.Designs ? (
-              <Collapse in={expandedProductTypes.Designs} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItemButton onClick={handleToggle(roomOpen, setRoomOpen)}>
-                    <ListItemText primary="Room" />
-                  </ListItemButton>
-                  {roomOpen ? <ExpandLess /> : <ExpandMore />}
-                </List>
-              </Collapse>
-            ) : null}
           </ListItemButton>
+          {productType === 'Designs' && expandedProductTypes.Designs ? (
+            <Collapse sx={{ pl: 4 }} in={expandedProductTypes.Designs} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItemButton sx={{ pl: 4 }} onClick={handleToggle(roomOpen, setRoomOpen)}>
+                  <ListItemText primary="Room" />
+                  {roomOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={roomOpen} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItemButton>
+                      <RadioGroup sx={{ pl: 4 }} value={designRoom} onChange={handleDesignRoomChange}>
+                        <FormControlLabel value="living_room" control={<Radio />} label="Living Room" />
+                        <FormControlLabel value="bedroom" control={<Radio />} label="Bedroom" />
+                        <FormControlLabel value="office" control={<Radio />} label="Office" />
+                        <FormControlLabel value="bathroom" control={<Radio />} label="Bathroom" />
+                      </RadioGroup>
+                    </ListItemButton>
+                  </List>
+                </Collapse>
+                <ListItemButton sx={{ pl: 4 }} onClick={handleToggle(styleOpen, setStyleOpen)}>
+                  <ListItemText primary="Style" />
+                  {styleOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={styleOpen} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItemButton>
+                      <RadioGroup sx={{ pl: 4 }} value={designStyle} onChange={handleDesignStyleChange}>
+                        <FormControlLabel value="midcentury_modern" control={<Radio />} label="Midcentury Modern" />
+                        <FormControlLabel value="modern" control={<Radio />} label="Modern" />
+                        <FormControlLabel value="bohemian" control={<Radio />} label="Bohemian" />
+                        <FormControlLabel value="industrial" control={<Radio />} label="Industrial" />
+                        <FormControlLabel value="traditional" control={<Radio />} label="Traditional" />
+                      </RadioGroup>
+                    </ListItemButton>
+                  </List>
+                </Collapse>
+                {designRoom || designStyle ? (
+                  <Button sx={{ pl: 4 }} onClick={handleClearFilters}>
+                    Clear Filters
+                  </Button>
+                ) : (
+                  ''
+                )}
+              </List>
+            </Collapse>
+          ) : null}
           <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Home/Decor'))}>Home & Decor</ListItemButton>
           <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Plant Care'))}>Plant Care</ListItemButton>
           <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Planters/Stands'))}>Planters & Stands</ListItemButton>

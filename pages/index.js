@@ -12,6 +12,7 @@ function Home() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [designs, setDesigns] = useState([]);
+  const [isLoadingDesigns, setIsLoadingDesigns] = useState(true);
 
   const getAllProducts = () => {
     getProducts().then((productsArr) => {
@@ -23,6 +24,7 @@ function Home() {
   const getAllDesigns = () => {
     getDesigns().then((designsArr) => {
       setDesigns(designsArr);
+      setIsLoadingDesigns(false);
     });
   };
 
@@ -33,10 +35,12 @@ function Home() {
 
   return (
     <div className="home-container">
-      {user && !user.id ? (<UserForm user={user} onUpdate={getAllProducts} />) : (
+      {user && !user.id ? (
+        <UserForm user={user} onUpdate={getAllProducts} />
+      ) : (
         <>
           <SearchField products={products} setFilteredProducts={setFilteredProducts} />
-          <DesignCarousel designs={designs} />
+          {isLoadingDesigns ? <div>Loading designs...</div> : <DesignCarousel designs={designs} />}
           <div className="product-cards-container">
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
