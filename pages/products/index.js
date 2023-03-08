@@ -7,7 +7,7 @@ import { getProducts, getProductsByType } from '../../utils/data/productData';
 
 function ProductHome() {
   const {
-    productType, careLevel, lightLevel, waterNeeds, petFriendly,
+    productType, careLevel, lightLevel, waterNeeds, petFriendly, decorStyle,
   } = useContext(ProductTypeContext);
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -32,6 +32,7 @@ function ProductHome() {
       lightLevel,
       waterNeeds,
       petFriendly,
+      decorStyle,
     };
 
     getProductsByType(queryParams).then((productsArr) => {
@@ -46,7 +47,7 @@ function ProductHome() {
     } else {
       getAllProducts();
     }
-  }, [productType, careLevel, lightLevel, waterNeeds, petFriendly]);
+  }, [productType, careLevel, lightLevel, waterNeeds, petFriendly, decorStyle]);
 
   return (
     <div className="products">

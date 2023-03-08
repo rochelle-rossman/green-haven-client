@@ -9,6 +9,7 @@ const ProductTypeContext = createContext({
   petFriendly: '',
   designStyle: '',
   designRoom: '',
+  decorStyle: '',
   setProductType: () => {},
   setCareLevel: () => {},
   setLightLevel: () => {},
@@ -16,6 +17,7 @@ const ProductTypeContext = createContext({
   setPetFriendly: () => { },
   setDesignStyle: () => { },
   setDesignRoom: () => { },
+  setDecorStyle: () => { },
 });
 
 const ProductTypeProvider = ({ children }) => {
@@ -26,6 +28,7 @@ const ProductTypeProvider = ({ children }) => {
   const [petFriendly, setPetFriendly] = useState('');
   const [designStyle, setDesignStyle] = useState('');
   const [designRoom, setDesignRoom] = useState('');
+  const [decorStyle, setDecorStyle] = useState('');
 
   const value = useMemo(
     () => ({
@@ -43,8 +46,10 @@ const ProductTypeProvider = ({ children }) => {
       setDesignStyle,
       designRoom,
       setDesignRoom,
+      decorStyle,
+      setDecorStyle,
     }),
-    [productType, setProductType, careLevel, setCareLevel, lightLevel, setLightLevel, waterNeeds, setWaterNeeds, petFriendly, setPetFriendly, designStyle, setDesignStyle, designRoom, setDesignRoom],
+    [productType, setProductType, careLevel, setCareLevel, lightLevel, setLightLevel, waterNeeds, setWaterNeeds, petFriendly, setPetFriendly, designStyle, setDesignStyle, designRoom, setDesignRoom, decorStyle, setDecorStyle],
   );
 
   return (

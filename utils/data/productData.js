@@ -30,7 +30,7 @@ const getProductTypes = () => new Promise((resolve, reject) => {
 
 const getProductsByType = (queryParams) => new Promise((resolve, reject) => {
   const {
-    type, careLevel, lightLevel, waterNeeds, petFriendly,
+    type, careLevel, lightLevel, waterNeeds, petFriendly, decorStyle,
   } = queryParams;
   let queryString = `type=${type}`;
   if (type === 'Houseplants') {
@@ -45,6 +45,10 @@ const getProductsByType = (queryParams) => new Promise((resolve, reject) => {
     }
     if (petFriendly) {
       queryString += '&pet_friendly=True';
+    }
+  } else if (type === 'Home/Decor') {
+    if (decorStyle) {
+      queryString += `&style=${decorStyle}`;
     }
   }
   fetch(`${dbUrl}/products?${queryString}`)
