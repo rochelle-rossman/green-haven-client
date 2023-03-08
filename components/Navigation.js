@@ -65,7 +65,7 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
   const [expandedProductTypes, setExpandedProductTypes] = useState([]);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const {
-    productType, setProductType, careLevel, setCareLevel, lightLevel, setLightLevel, waterNeeds, setWaterNeeds, petFriendly, setPetFriendly, designStyle, setDesignStyle, designRoom, setDesignRoom,
+    productType, setProductType, careLevel, setCareLevel, lightLevel, setLightLevel, waterNeeds, setWaterNeeds, petFriendly, setPetFriendly, designStyle, setDesignStyle, designRoom, setDesignRoom, decorStyle, setDecorStyle,
   } = useContext(ProductTypeContext);
   const { cartCount } = useContext(CartCountContext);
   const [lightLevelOpen, setLightLevelOpen] = useState(false);
@@ -73,6 +73,7 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
   const [waterNeedsOpen, setWaterNeedsOpen] = useState(false);
   const [roomOpen, setRoomOpen] = useState(false);
   const [styleOpen, setStyleOpen] = useState(false);
+  const [decorStyleOpen, setDecorStyleOpen] = useState(false);
 
   const handleToggle = (state, setState) => () => {
     setState(!state);
@@ -128,6 +129,10 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
     setDesignStyle(event.target.value);
   };
 
+  const handleDecorStyleChange = (event) => {
+    setDecorStyle(event.target.value);
+  };
+
   const handleClearFilters = () => {
     setCareLevel('');
     setLightLevel('');
@@ -135,6 +140,7 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
     setPetFriendly('');
     setDesignRoom('');
     setDesignStyle('');
+    setDecorStyle('');
   };
 
   return (
@@ -285,7 +291,13 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
                     <FormControlLabel onClick={handlePetFriendlyChange} value="True" control={<Radio />} />
                   </RadioGroup>
                 </ListItemButton>
-                {careLevel || waterNeeds || lightLevel || petFriendly ? <Button onClick={handleClearFilters}>Clear Filters</Button> : ''}
+                {careLevel || waterNeeds || lightLevel || petFriendly ? (
+                  <Button color="secondary" onClick={handleClearFilters}>
+                    Clear Filters
+                  </Button>
+                ) : (
+                  ''
+                )}
               </List>
             </Collapse>
           ) : null}
@@ -335,7 +347,7 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
                   </List>
                 </Collapse>
                 {designRoom || designStyle ? (
-                  <Button sx={{ pl: 4 }} onClick={handleClearFilters}>
+                  <Button color="secondary" sx={{ pl: 4 }} onClick={handleClearFilters}>
                     Clear Filters
                   </Button>
                 ) : (
@@ -344,7 +356,38 @@ export default function Navigation({ onDrawerOpen, onDrawerClose }) {
               </List>
             </Collapse>
           ) : null}
-          <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Home/Decor'))}>Home & Decor</ListItemButton>
+          <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Home/Decor'))}>
+            Home & Decor
+            {expandedProductTypes['Home/Decor'] ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          {productType === 'Home/Decor' && expandedProductTypes['Home/Decor'] ? (
+            <Collapse sx={{ pl: 4 }} in={expandedProductTypes['Home/Decor']} timeout="auto" unmountOnExit>
+              <ListItemButton sx={{ pl: 4 }} onClick={handleToggle(decorStyleOpen, setDecorStyleOpen)}>
+                <ListItemText primary="Style" />
+                {decorStyleOpen ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+              <Collapse in={decorStyleOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <ListItemButton>
+                    <RadioGroup sx={{ pl: 4 }} value={decorStyle} onChange={handleDecorStyleChange}>
+                      <FormControlLabel value="midcentury_modern" control={<Radio />} label="Midcentury Modern" />
+                      <FormControlLabel value="modern" control={<Radio />} label="Modern" />
+                      <FormControlLabel value="bohemian" control={<Radio />} label="Bohemian" />
+                      <FormControlLabel value="industrial" control={<Radio />} label="Industrial" />
+                      <FormControlLabel value="traditional" control={<Radio />} label="Traditional" />
+                    </RadioGroup>
+                  </ListItemButton>
+                </List>
+              </Collapse>
+              {decorStyle ? (
+                <Button color="secondary" sx={{ pl: 4 }} onClick={handleClearFilters}>
+                  Clear Filters
+                </Button>
+              ) : (
+                ''
+              )}
+            </Collapse>
+          ) : null}
           <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Plant Care'))}>Plant Care</ListItemButton>
           <ListItemButton onClick={() => router.push('/products').then(handleProductTypeClick('Planters/Stands'))}>Planters & Stands</ListItemButton>
         </List>
