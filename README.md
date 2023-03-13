@@ -1,78 +1,72 @@
-# React/Next.js Template
 
-[See Live Demo of this Template](https://drt-next-js-template.netlify.app/)
+# Green Haven Client
 
-## Topics
-- [Get Started](#get-started)
-- [Starting the Project](#starting-the-project)
-- [Using axios](#using-axios)
-- [Deploying on Netlify](#deploying-on-netlify)
-___
-## Getting Started
-### Use Template
-#### 1. To get started, click the GREEN "Use this Template" button at the top of the repo
-<img width="915" alt="Screen Shot 2022-07-06 at 12 54 01 PM" src="https://user-images.githubusercontent.com/29741570/177612998-4aac9237-5a1e-4f13-8ae0-468587521564.png">
+This is the frontend component of a full-stack e-commerce application, focused on houseplants and design. The goal was to create an application that could inform and inspire cutomers who are looking for houseplants that they could successfully care for and enhance their homes interior aesthetic. 
 
-#### 2. Make sure YOUR github account is selected in the dropdown and name your project
-<img width="763" alt="Screen Shot 2022-07-06 at 12 54 48 PM" src="https://user-images.githubusercontent.com/29741570/177613126-dd38f678-7553-4f27-8a4a-75680f14d71e.png">
+## Overview
+This client-side application was built using React/Next.js, uses Firebase for authetication with Google, and communicates with a server-side application built with Python and Django. The server repository can be found here: https://github.com/rochelle-rossman/green-haven-server. Together, the client and server-side applications allow users to:
 
-#### 3. Clone your new repo to your local machine
-#### 4. Go to the **NEXT** section
+- Browse and search products, filtering with pertinent queries.
+- View images of inspirational interiors that feature the various products, and easily navigate to the featured products details where they can add the item to their cart.
+- Create an account, store their billing information, and view their order history
+- Update the quantity of a product or delete items in their order in their shopping cart view. 
+- Select a stored form of payment and checkout.
+## Screenshots
 
-## Starting the Project
-1. Create a Firebase project and set up authentication. Use [these videos](https://vimeo.com/showcase/codetracker-firebase) as a refresher if needed.
-1. Create a `.env` file at the root of the project
-1. Copy/Paste the contents of the `.env.sample` file to your newly created `.env` file.
-1. Copy over all of your Firebase values into the `.env` file.
-1. Open the `package.json` file and change the `name` property to the name of your application, and `author` to  your name.
-1. From your command line, be in the root directory and run `npm install` OR `npm i` for short.
-1. Next, run `npm run prepare`. This command sets up husky to track eslint errors on commit that will make your deploy fail on Netlify.
-1. To start your application, run `npm run dev`. THIS IS THE COMMAND YOU WILL USE TO RUN YOUR DEVELOPMENT SERVER FROM NOW ON.
-1. Open [http://localhost:3000](http://localhost:3000) with your browser.
+[![Screenshot-2023-03-13-at-10-27-23-AM.png](https://i.postimg.cc/ZKS0y18F/Screenshot-2023-03-13-at-10-27-23-AM.png)](https://postimg.cc/qg1pPDZz)
 
-### If you see this, you are set to go!
-<img width="450" alt="Screen Shot 2022-07-06 at 1 07 27 PM" src="https://user-images.githubusercontent.com/29741570/177615077-9b6a75bc-0260-4d29-bb88-bd95a3140687.png">
+[![Screenshot-2023-03-13-at-10-28-14-AM.png](https://i.postimg.cc/c4BC7XTq/Screenshot-2023-03-13-at-10-28-14-AM.png)](https://postimg.cc/qzgp4c9Q)
 
+[![Screenshot-2023-03-13-at-10-28-33-AM.png](https://i.postimg.cc/q7SvBYBK/Screenshot-2023-03-13-at-10-28-33-AM.png)](https://postimg.cc/xkG2t6zj)
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+[![Screenshot-2023-03-13-at-10-28-50-AM.png](https://i.postimg.cc/DZGySgmM/Screenshot-2023-03-13-at-10-28-50-AM.png)](https://postimg.cc/2bzfJnQQ)
 
-**NOTES:** 
-- If you see the following error, you did not follow all the setup steps correctly and failed to add your Firebase creds. Go back and do that NOW.
+[![Screenshot-2023-03-13-at-10-29-21-AM.png](https://i.postimg.cc/pdpdHxvx/Screenshot-2023-03-13-at-10-29-21-AM.png)](https://postimg.cc/QBZDQ2Vn)
 
-<img width="1043" alt="Screen Shot 2022-07-06 at 11 18 45 AM" src="https://user-images.githubusercontent.com/29741570/177612501-c2628f18-4bbd-4de9-aae6-27ffba1172d6.png">
+[![Screenshot-2023-03-13-at-10-29-53-AM.png](https://i.postimg.cc/Gm32XGS4/Screenshot-2023-03-13-at-10-29-53-AM.png)](https://postimg.cc/SJ5ks244)
 
-### Using Axios
-> For every file you will need to make an XHR request in, you will need to require Axios
-```js
-import axios from 'axios';
+[![Screenshot-2023-03-13-at-10-31-33-AM.png](https://i.postimg.cc/Vk7Npv3D/Screenshot-2023-03-13-at-10-31-33-AM.png)](https://postimg.cc/68vwGW6v)
+## ERD
+https://drawsql.app/teams/rochelle-rossman/diagrams/green-haven
+[![draw-SQL-green-haven-export-2023-03-13.png](https://i.postimg.cc/MKF4L891/draw-SQL-green-haven-export-2023-03-13.png)](https://postimg.cc/VdXDS2QN)
+## Wireframe
+https://miro.com/app/board/uXjVPqtXsKY=/?share_link_id=554081059619
+## Run Locally
+#### First:
+#### - Create a Firebase project and enable authentication through Google
+#### - Clone the server-side repository and make migrations
 
-const examplePromise = () => {
-  axios.get('http://localhost:3001/example')
-    .then((data) => {
-      console.warn(data);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-});
+#### Then:
+
+Clone the repository
+
+```bash
+  git clone git@github.com:rochelle-rossman/green-haven-client.git
 ```
 
-### Deploying on Netlify
-Netlify will automatically detect your project and prepopulate the settings, but should something go wrong and it does not, here are the commands:
+Go to the project directory
 
-- Build Command: `npm run build`
-- Publish directory: `.next`
+```bash
+  cd green-haven-client
+```
 
-#### Additional Steps to Take on Netlify
-- Add Environmental Variables
-    - Any Enviromental variables you are using in your `.env` file should be added to Netlify. 
-        - Go to Site settings > Build & deploy > Environment > Environment variables and the keys and values there.
+Install dependencies in the root directory
 
-- Update Firebase URL Settings
-    - In Firebase under Authentication select sign in methods, scroll to Authorized domains. Add your Netlify URL.
-        
-## Learn More about Next.js
-To learn more about Next.js, take a look at the following resources:
+```bash
+  npm install
+```
+```bash
+  npm run prepare
+```
+Create an env file and copy over the required variables
+```bash
+NEXT_PUBLIC_FIREBASE_API_KEY=""
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=""
+NEXT_PUBLIC_DATABASE_URL=http://localhost:8000 
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Start the server
+
+```bash
+  npm run dev
+```
