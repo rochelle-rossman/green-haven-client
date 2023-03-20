@@ -60,6 +60,7 @@ export default function ShoppingCartView() {
     if (productOrderToUpdate) {
       deleteProductOrder(productOrderToUpdate.id).then(() => {
         setOpenOrder(openOrder.filter((productOrder) => productOrder.id !== productOrderToUpdate.id));
+        setCartCount(cartCount - productOrderToUpdate.quantity);
       });
     }
   };

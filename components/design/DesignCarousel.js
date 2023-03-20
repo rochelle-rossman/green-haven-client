@@ -30,6 +30,7 @@ function DesignCarousel({ designs }) {
               maxHeight: '500px',
               maxWidth: '80%',
               objectFit: 'contain',
+              padding: '10px',
             }}
           />
         </Link>
