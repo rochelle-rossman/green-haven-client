@@ -103,22 +103,29 @@ export default function ShoppingCart({
               <div style={{ justifyContent: 'flex-end' }}>
                 <b>Total:</b> {formatCurrency(total)}
               </div>
-              <div style={{ justifyContent: 'flex-end', margin: '15px' }}>
-                <FormControl fullWidth required>
-                  <Select value={selectedPaymentMethod.id || ''} onChange={(e) => setSelectedPaymentMethod(payments.find((payment) => payment.id === e.target.value))}>
-                    {payments.map((payment) => (
-                      <MenuItem key={payment.id} value={payment.id}>
-                        {payment.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </div>
-              <div style={{ justifyContent: 'flex-end' }}>
-                <Button disabled={!selectedPaymentMethod.id} variant="outlined" color="secondary" onClick={() => handleCheckOut()}>
-                  Check Out
-                </Button>
-              </div>
+              {payments?.length ? (
+                <>
+                  <div style={{ justifyContent: 'flex-end', margin: '15px' }}>
+                    <b>Select a payment method:</b>
+                    <FormControl fullWidth required>
+                      <Select value={selectedPaymentMethod.id || ''} onChange={(e) => setSelectedPaymentMethod(payments.find((payment) => payment.id === e.target.value))}>
+                        {payments.map((payment) => (
+                          <MenuItem key={payment.id} value={payment.id}>
+                            {payment.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </div>
+                  <div style={{ justifyContent: 'flex-end' }}>
+                    <Button disabled={!selectedPaymentMethod.id} variant="outlined" color="secondary" onClick={() => handleCheckOut()}>
+                      Check Out
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <Button onClick={() => router.push('../payment/new')}>Add A Payment Method</Button>
+              )}
             </TableCell>
           </div>
         </>

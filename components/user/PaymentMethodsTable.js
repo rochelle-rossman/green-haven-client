@@ -35,7 +35,7 @@ export default function PaymentMethodsTable({ paymentMethods, onUpdate }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {paymentMethods.map((method) => (
+          {paymentMethods?.map((method) => (
             <TableRow key={method.id}>
               <TableCell>{method.label}</TableCell>
               <TableCell align="right">{method.card_number}</TableCell>
