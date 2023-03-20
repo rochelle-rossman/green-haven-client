@@ -11,12 +11,6 @@ export default function UserView() {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [orders, setOrders] = useState([]);
 
-  const getThePaymentMethods = () => {
-    getCustomersPaymentMethods(user.id).then((methods) => {
-      setPaymentMethods(methods);
-    });
-  };
-
   useEffect(() => {
     getCustomersPaymentMethods(user.id).then((methods) => {
       setPaymentMethods(methods);
@@ -30,7 +24,7 @@ export default function UserView() {
         <UserInfoCard className="userInfoCard" userObj={user} />
         <OrdersTable className="orderHistory" orders={orders} />
       </div>
-      <PaymentMethodsTable className="paymentMethods" paymentMethods={paymentMethods} onUpdate={getThePaymentMethods} />
+      <PaymentMethodsTable className="paymentMethods" paymentMethods={paymentMethods} onUpdate={setPaymentMethods} />
     </div>
   );
 }
