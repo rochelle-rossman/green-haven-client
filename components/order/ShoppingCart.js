@@ -124,7 +124,9 @@ export default function ShoppingCart({
                   </div>
                 </>
               ) : (
-                <Button onClick={() => router.push('../payment/new')}>Add A Payment Method</Button>
+                <Button color="secondary" onClick={() => router.push('../payment/new')}>
+                  Add A Payment Method
+                </Button>
               )}
             </TableCell>
           </div>
