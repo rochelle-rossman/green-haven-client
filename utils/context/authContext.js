@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useMemo,
   useState,
+  useCallback,
 } from 'react';
 import { checkUser } from '../auth';
 import { firebase } from '../client';
@@ -30,6 +31,13 @@ const AuthProvider = (props) => {
     [oAuthUser],
   );
 
+  const authUpdateUser = useCallback(
+    (uid) => {
+      onUpdate(uid);
+    },
+    [onUpdate],
+  );
+
   useEffect(() => {
     firebase.auth().onAuthStateChanged((fbUser) => {
       if (fbUser) {
@@ -49,6 +57,14 @@ const AuthProvider = (props) => {
       }
     }); // creates a single global listener for auth state changed
   }, []);
+
+  const checkUserAndUpdateState = useCallback(
+    (uid) => {
+      onUpdate(uid);
+    },
+    [onUpdate],
+  );
+
   const value = useMemo(
     // https://reactjs.org/docs/hooks-reference.html#usememo
     () => ({
@@ -57,8 +73,10 @@ const AuthProvider = (props) => {
       userLoading: user === null || oAuthUser === null,
       // as long as user === null, will be true
       // As soon as the user value !== null, value will be false
+      checkUserAndUpdateState,
+      authUpdateUser,
     }),
-    [user, oAuthUser, onUpdate],
+    [user, oAuthUser, onUpdate, checkUserAndUpdateState, authUpdateUser],
   );
 
   return <AuthContext.Provider value={value} {...props} />;

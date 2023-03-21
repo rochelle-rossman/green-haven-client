@@ -122,15 +122,16 @@ function ProductDetails({ productObj }) {
           <Typography variant="body2" component="span" sx={{ margin: '0 8px' }}>
             {quantity}
           </Typography>
-          <Button onClick={handleIncrement} color="secondary" disabled={quantity >= productObj.inventory}>
+          <Button onClick={handleIncrement} color="secondary" disabled={!user.id || quantity >= productObj.inventory}>
             +
           </Button>
         </div>
-        <Button variant="contained" color="secondary" onClick={addToCart} disabled={productObj.inventory === 0}>
+        <Button variant="contained" color="secondary" onClick={addToCart} disabled={!user.id || productObj.inventory === 0}>
           <ShoppingCart />
           Add to Cart
         </Button>
         {productObj.inventory <= 0 && <Badge sx={{ marginLeft: '28px' }} badgeContent="Out of Stock" />}
+        {!user.id ? (<Typography color="error">Please login and create an account to add items to your cart</Typography>) : ('')}
       </CardContent>
       <Dialog open={isModalOpen} onClose={handleCloseModal} sx={{ textAlign: 'center' }}>
         <DialogTitle>{productObj.name}</DialogTitle>
