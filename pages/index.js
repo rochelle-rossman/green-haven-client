@@ -1,38 +1,33 @@
 import { useEffect, useState } from 'react';
-// import Image from 'next/image';
+import { Typography } from '@mui/material';
 import DesignCarousel from '../components/design/DesignCarousel';
 import UserForm from '../components/user/UserForm';
 import { useAuth } from '../utils/context/authContext';
 import ProductCard from '../components/product/ProductCard';
-import SearchField from '../components/product/SearchField';
 import { getProducts } from '../utils/data/productData';
 import { getDesigns } from '../utils/data/designData';
 import Welcome from '../components/Welcome';
+import Loading from '../components/Loading';
 
 function Home() {
   const { user, onUpdate, authUpdateUser } = useAuth();
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
   const [designs, setDesigns] = useState([]);
   const [isLoadingDesigns, setIsLoadingDesigns] = useState(true);
 
-  const getAllProducts = () => {
+  useEffect(() => {
     getProducts().then((productsArr) => {
-      setProducts(productsArr);
-      setFilteredProducts(productsArr);
+      // Shuffle the products array
+      const shuffledProducts = productsArr.sort(() => Math.random() - 0.5);
+      // Slice the first 4 products
+      const featuredProducts = shuffledProducts.slice(0, 4);
+      // Set the state with the random products
+      setProducts(featuredProducts);
     });
-  };
-
-  const getAllDesigns = () => {
     getDesigns().then((designsArr) => {
       setDesigns(designsArr);
       setIsLoadingDesigns(false);
     });
-  };
-
-  useEffect(() => {
-    getAllProducts();
-    getAllDesigns();
   }, []);
 
   return (
@@ -41,14 +36,17 @@ function Home() {
         <UserForm user={user} onUpdate={onUpdate} authUpdateUser={authUpdateUser} />
       ) : (
         <>
-          <SearchField products={products} setFilteredProducts={setFilteredProducts} />
           <Welcome />
-          {/* <Image src="/images/green-haven-high-resolution-logo-color-on-transparent-background (1).png" width={400} height={200} /> */}
-          {isLoadingDesigns ? <div>Loading designs...</div> : <DesignCarousel designs={designs} />}
-          <div className="product-cards-container">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+          {isLoadingDesigns ? <Loading /> : <DesignCarousel designs={designs} />}
+          <div className="featured-products-container">
+            <Typography variant="h4">
+              Featured Products
+            </Typography>
+            <div className="product-cards-container">
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
           </div>
         </>
       )}

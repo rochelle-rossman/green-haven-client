@@ -36,6 +36,11 @@ body {
   margin: 10px;
 }
 
+.featured-products-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .product-cards-container {
   display: grid;

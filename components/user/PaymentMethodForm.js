@@ -55,9 +55,9 @@ function PaymentMethodForm({ paymentMethod }) {
     e.preventDefault();
     const payload = { ...formData, customer: user.id };
     if (paymentMethod.id) {
-      updatePaymentMethod(paymentMethod.id, payload).then(router.push(`/user/${user.id}`));
+      updatePaymentMethod(paymentMethod.id, payload).then(router.back());
     } else {
-      createPaymentMethod(payload).then(router.push(`/user/${user.id}`));
+      createPaymentMethod(payload).then(router.back());
     }
   };
 
