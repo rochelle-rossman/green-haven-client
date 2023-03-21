@@ -54,8 +54,11 @@ function UserForm({ user, onUpdate, authUpdateUser }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (user.id) {
-      updateUser(user.id, { ...formData, state: selectedState });
-      router.push(`../../user/${user.id}`);
+      updateUser(user.id, { ...formData, state: selectedState }).then(() => {
+        authUpdateUser(user.uid);
+        onUpdate(user.uid);
+      });
+      router.back();
     } else {
       registerUser(user, { ...formData, state: selectedState, uid: user.uid }).then(() => {
         authUpdateUser(user.uid);
@@ -91,7 +94,7 @@ function UserForm({ user, onUpdate, authUpdateUser }) {
         </FormControl>
         <TextField onChange={handleChange} InputLabelProps={{ shrink: true }} name="zipcode" value={formData.zipcode} label="Zipcode" variant="outlined" required />
       </Box>
-      <Button variant="outlined" type="submit">
+      <Button color="success" variant="outlined" type="submit">
         Submit
       </Button>
     </Form>

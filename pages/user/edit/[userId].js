@@ -3,9 +3,11 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import UserForm from '../../../components/user/UserForm';
 import { getSingleUser } from '../../../utils/data/userData';
+import { useAuth } from '../../../utils/context/authContext';
 
 export default function EditUser() {
   const [user, setUser] = useState({});
+  const { onUpdate, authUpdateUser } = useAuth();
   const router = useRouter();
   const { userId } = router.query;
 
@@ -19,7 +21,7 @@ export default function EditUser() {
 
   return (
     <div>
-      <UserForm user={user} onUpdate={getTheUser} />
+      <UserForm user={user} onUpdate={onUpdate} authUpdateUser={authUpdateUser} />
     </div>
   );
 }
