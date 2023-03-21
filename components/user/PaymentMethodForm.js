@@ -11,7 +11,7 @@ const initialState = {
   cardNumber: '',
   expirationDate: '',
 };
-function PaymentMethodForm({ paymentMethod }) {
+function PaymentMethodForm({ paymentMethod, onUpdate }) {
   const [formData, setFormData] = useState(initialState);
   const { user } = useAuth();
   const router = useRouter();
@@ -55,9 +55,15 @@ function PaymentMethodForm({ paymentMethod }) {
     e.preventDefault();
     const payload = { ...formData, customer: user.id };
     if (paymentMethod.id) {
-      updatePaymentMethod(paymentMethod.id, payload).then(router.back());
+      updatePaymentMethod(paymentMethod.id, payload).then(() => {
+        onUpdate();
+        router.back();
+      });
     } else {
-      createPaymentMethod(payload).then(router.back());
+      createPaymentMethod(payload).then(() => {
+        onUpdate();
+        router.back();
+      });
     }
   };
 
@@ -84,6 +90,7 @@ PaymentMethodForm.propTypes = {
     expirationDate: PropTypes.string,
     customer: PropTypes.number,
   }),
+  onUpdate: PropTypes.func.isRequired,
 };
 
 PaymentMethodForm.defaultProps = {

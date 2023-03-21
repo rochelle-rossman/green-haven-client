@@ -8,9 +8,13 @@ export default function EditPayment() {
   const [editPayment, setEditPayment] = useState({});
   const { paymentId } = router.query;
 
+  const onUpdate = () => {
+    getSinglePaymentMethod(paymentId).then(setEditPayment);
+  };
+
   useEffect(() => {
     getSinglePaymentMethod(paymentId).then(setEditPayment);
   }, [paymentId]);
 
-  return <PaymentMethodForm paymentMethod={editPayment} />;
+  return <PaymentMethodForm paymentMethod={editPayment} onUpdate={onUpdate} />;
 }
