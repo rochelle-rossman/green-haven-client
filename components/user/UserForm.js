@@ -25,7 +25,7 @@ const initialUserState = {
   zipcode: '',
 };
 
-function UserForm({ user, onUpdate }) {
+function UserForm({ user, onUpdate, authUpdateUser }) {
   const [formData, setFormData] = useState(initialUserState);
   const router = useRouter();
   const [selectedState, setSelectedState] = useState(user.state ? user.state : states[0]);
@@ -57,7 +57,10 @@ function UserForm({ user, onUpdate }) {
       updateUser(user.id, { ...formData, state: selectedState });
       router.push(`../../user/${user.id}`);
     } else {
-      registerUser(user, { ...formData, state: selectedState, uid: user.uid }).then(() => onUpdate(user.uid));
+      registerUser(user, { ...formData, state: selectedState, uid: user.uid }).then(() => {
+        authUpdateUser(user.uid);
+        onUpdate(user.uid);
+      });
       router.push('/');
     }
   };
@@ -107,6 +110,7 @@ UserForm.propTypes = {
     zipcode: PropTypes.number,
   }),
   onUpdate: PropTypes.func.isRequired,
+  authUpdateUser: PropTypes.func.isRequired,
 };
 
 UserForm.defaultProps = {

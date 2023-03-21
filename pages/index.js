@@ -10,12 +10,11 @@ import { getDesigns } from '../utils/data/designData';
 import Welcome from '../components/Welcome';
 
 function Home() {
-  const { user } = useAuth();
+  const { user, onUpdate, authUpdateUser } = useAuth();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [designs, setDesigns] = useState([]);
   const [isLoadingDesigns, setIsLoadingDesigns] = useState(true);
-  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const getAllProducts = () => {
     getProducts().then((productsArr) => {
@@ -31,11 +30,6 @@ function Home() {
     });
   };
 
-  const handleFormSubmit = () => {
-    setFormSubmitted(true);
-    getAllProducts();
-  };
-
   useEffect(() => {
     getAllProducts();
     getAllDesigns();
@@ -43,8 +37,8 @@ function Home() {
 
   return (
     <div className="home-container">
-      {user && !user.id && !formSubmitted ? (
-        <UserForm user={user} onUpdate={handleFormSubmit} />
+      {user && !user.id ? (
+        <UserForm user={user} onUpdate={onUpdate} authUpdateUser={authUpdateUser} />
       ) : (
         <>
           <SearchField products={products} setFilteredProducts={setFilteredProducts} />
